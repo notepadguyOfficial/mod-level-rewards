@@ -11,7 +11,7 @@ public:
 	
 	void OnPlayerLevelChanged(Player* player, uint8 level) override
 	{
-		if(!player || player->GetSession()->HasPermission(rabc::RBAC_PERM_SKIP_CHECKS))
+		if(!player)
 			return;
 
 		uint32 Sender = 10667;
@@ -32,15 +32,15 @@ public:
             {10, {{49313, 2}}}
         };
 		
-		if(Items.count(level + 1))
+		if(Items.count(level))
 		{
 			MailDraft draft(subject, "Hello " + player->GetName() + body);
 			draft.SetStationary(static_cast<MailStationary>(Stationary));
 			
-			if(Coins.count(level + 1))
-				draft.AddMoney(Coins[level + 1]);
+			if(Coins.count(level))
+				draft.AddMoney(Coins[level]);
 			
-			for(auto const& Data : Items[level + 1])
+			for(auto const& Data : Items[level])
 			{
 				if(Item* item = Item::CreateItem(Data.first, Data.second, player))
 					draft.AddItem(item);
@@ -49,10 +49,10 @@ public:
 			draft.SendMailTo(player, MailSender(MAIL_CREATURE, Sender), MAIL_CHECK_MASK_NONE);
 		}
 		
-		else if(Coins.count(level + 1)
-			player->ModifyMoney(Coins[level + 1]);
+		else if(Coins.count(level)
+			player->ModifyMoney(Coins[level]);
 		
-		CharacterDatabase.Execute("UPDATE mail SET messageType = 3 WHERE sender = {} AND receiver = {} AND messageType = 0", Sender, player->GetGUID().GetCounter());
+		CharacterDatabase.Execute("UPDATE mail SET messageType = 3 WHERE sender = {} AND receiver = {} AND messageType = 0", Sender, player->GetGUID());
 	}
 }
 
