@@ -1,5 +1,5 @@
 {
-  "name": "mod-autobalance",
+  "name": "mod-level-rewards",
   "version": "2.2.0",
   "compatibility" : [
       { "version": "1.0.0", "branch": "none" },
